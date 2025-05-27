@@ -1,0 +1,49 @@
+
+# VM 08 – Borg-Victim (Metasploitable 2)
+
+## 🖥️ VM Configuration
+- **RAM:** 768 MB
+- **vCPU:** 1
+- **Disk:** 10 GB
+- **OS:** Metasploitable 2
+- **Network:**
+  - Host-Only (VMnet1 - LAN)
+  - Host-Only (VMnet9 - ADMIN) for browser access from Windows
+
+---
+
+## 🌐 IP Address
+- **DHCP (192.168.1.0/24)**
+- **Admin (Windows browser):** 192.168.99.X (assigned manually if needed)
+
+---
+
+## 🔧 Pre-installed Services
+- FTP: `ftp 192.168.1.X` (anonymous access)
+- SSH: `ssh msfadmin@192.168.1.X`
+- Tomcat: `http://192.168.1.X:8080`
+- MySQL: `mysql -u root -p`
+- Samba shares
+
+Test default credentials:
+- msfadmin / msfadmin
+- user / user
+
+---
+
+## 🛠️ Vulnerable Services
+- FTP (anonymous access)
+- SSH (default creds)
+- Tomcat, MySQL, Samba, etc.
+
+---
+
+## 🎯 Purpose
+- Primary exploitation target
+- Supports lateral movement, persistence, and privilege escalation labs
+
+---
+
+## 🛡️ Hardening Ideas (Optional Future)
+- Add reverse shell detection (Splunk)
+- Enable basic auditing for Samba and MySQL (log forwarding)
