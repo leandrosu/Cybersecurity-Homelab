@@ -1,0 +1,49 @@
+# VM 03 – Neo-Client (Windows 10 Workstation)
+
+## 🖥️ VM Configuration
+- **RAM:** 4 GB
+- **vCPU:** 2
+- **Disk:** 40 GB
+- **OS:** Windows 10 Pro (Evaluation)
+- **Network:** Host-Only (VMnet1 - LAN)
+
+---
+
+## 🌐 Network Configuration
+- **DHCP:** 192.168.1.0/24 (provided by Gondor-DC)
+- **Gateway:** 192.168.1.254 (pfSense)
+- **DNS:** 192.168.20.10 (Gondor-DC)
+
+---
+
+## 🔧 Setup Steps
+
+1️⃣ Install Windows 10 Pro (Evaluation).  
+2️⃣ Configure network adapter to obtain IP automatically (DHCP).  
+3️⃣ Join domain `lab.local`:
+   - System > About > Change Settings > Domain: `lab.local`
+   - Credentials: `LAB\administrator` / `Lab123@`
+4️⃣ Reboot the machine.  
+5️⃣ Log in with domain user: `LAB\leandro`.
+
+---
+
+## 🎯 Role
+- Domain-joined workstation for user simulation.
+- Generates logon events, endpoint activity, and browsing logs.
+
+---
+
+## 🔧 Features
+- Receives GPOs from Gondor-DC.
+- Sends event logs to Splunk (via WMI or agent).
+- Web browsing filtered by pfSense (gatekeeper).
+
+---
+
+## 🛡️ Hardening Ideas
+- Harden local policies (e.g., password policies, RDP access).
+- Simulate normal user activity and malicious traffic.
+- Enable Windows Defender and configure event forwarding.
+
+--- 
