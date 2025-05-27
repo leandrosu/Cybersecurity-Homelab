@@ -1,0 +1,61 @@
+# VM 02 – Gondor-DC (AD/DC + DNS + DHCP)
+
+## 🖥️ VM Configuration
+- **RAM:** 4 GB
+- **vCPU:** 2
+- **Disk:** 40 GB
+- **OS:** Debian 12
+- **Network:** Host-Only (VMnet3 - SERVERS)
+
+---
+
+## 🌐 Network Configuration
+- **Static IP:** 192.168.20.10
+- **Gateway:** 192.168.20.254 (gatekeeper)
+- **DNS:** 127.0.0.1 or 192.168.20.10
+
+---
+
+## 🔧 Core Services
+- Samba 4 (Active Directory Domain Controller, DNS, DHCP)
+- Domain: `lab.local`
+- DHCP scope: 192.168.20.100–192.168.20.200
+- Users & Groups managed via CLI (`samba-tool`)
+
+---
+
+## 🚀 Setup Steps
+
+1️⃣ Install required packages:  
+`apt update && apt install -y samba smbclient winbind krb5-user dnsutils`
+
+2️⃣ Provision the domain:  
+`samba-tool domain provision --use-rfc2307 --realm=LAB.LOCAL --domain=LAB --server-role=dc --adminpass=Lab123@`
+
+3️⃣ Edit `/etc/krb5.conf`:
+
+[libdefaults]
+default_realm = LAB.LOCAL
+dns_lookup_realm = false
+dns_lookup_kdc = true
+
+
+4️⃣ Start Samba services:  
+`systemctl restart smbd nmbd winbind`
+
+5️⃣ Create user (Leandro):  
+`samba-tool user add leandro Password123!`
+
+6️⃣ Test setup:
+- `kinit administrator`
+- `smbclient -L localhost -U%`
+
+---
+
+## 🔐 Hardening Ideas
+- Enable verbose logging and forward to Splunk (Oracle-SI).
+- Configure OUs and group-based permissions.
+- Regular backups of LDAP and Samba configs.
+
+---
+ 
