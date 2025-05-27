@@ -1,0 +1,64 @@
+# VM 05 – Oracle-SI (SIEM - Splunk Free)
+
+## 🖥️ VM Configuration
+- **RAM:** 6 GB
+- **vCPU:** 4
+- **Disk:** 60 GB
+- **OS:** Ubuntu Server 22.04 LTS
+- **Network:**
+  - Host-Only (VMnet3 - SERVERS)
+  - Host-Only (VMnet9 - ADMIN) for access from Windows host
+
+---
+
+## 🌐 Network Configuration
+- **Static IP (SERVERS):** 192.168.20.30
+- **Static IP (ADMIN):** 192.168.99.30 (access from Windows)
+
+---
+
+## 🔧 Install & Setup Splunk
+
+1️⃣ Install dependencies:  
+`apt update && apt install -y wget`
+
+2️⃣ Download & install Splunk:  
+`wget -O splunk.deb https://download.splunk.com/products/splunk/releases/9.0.5/linux/splunk-9.0.5.deb`  
+`dpkg -i splunk.deb`  
+`/opt/splunk/bin/splunk start --accept-license --answer-yes`
+
+3️⃣ Access Splunk WebUI:  
+`http://192.168.99.30:8000` (login: `admin / changeme`)
+
+4️⃣ Configure data inputs:  
+- **UDP 514** (for pfSense logs):  
+  `Settings > Data Inputs > Add Data > UDP 514`
+- **Windows Event Logs** (via Splunk Universal Forwarder)
+- **Samba Logs** (via syslog)
+
+---
+
+## 🔧 Core Services
+- Splunk Free 9.x (SIEM)
+- Receives logs from:
+  - pfSense (syslog)
+  - Gondor-DC (Samba, audit, DNS)
+  - Neo-Client (via WMI or forwarder)
+  - Trinity-Pentest (manual or scripted)
+
+---
+
+## 🛠️ Dashboards & Features
+- Login attempts
+- AD enumeration activity
+- Traffic anomalies
+- Proxy & firewall rule hits
+
+---
+
+## 🛡️ Hardening Ideas
+- Enable alerting and correlation rules
+- Deploy Splunk Universal Forwarder to all machines for detailed logs
+
+---
+ 
