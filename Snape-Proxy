@@ -1,0 +1,13 @@
+# VM 04 – Snape-Proxy (Proxy)
+
+**⚠️ Note:** This role has been consolidated into pfSense using pfBlockerNG and NAT rules.
+
+## ❌ Not Used as Separate VM
+All proxy functionalities like content filtering, blacklist enforcement, and logging are implemented directly in the `gatekeeper` (pfSense) firewall.
+
+🔧 No separate VM. Proxy functions (content filtering, blacklist) are handled by gatekeeper (pfSense) using:
+pfBlockerNG GeoIP.
+
+DNS Resolver filtering.
+
+Firewall rules.
