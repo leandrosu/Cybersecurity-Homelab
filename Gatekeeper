@@ -1,0 +1,77 @@
+# VM 01 – gatekeeper (pfSense)
+
+## 🖥️ VM Configuration
+- **RAM:** 2 GB
+- **vCPU:** 2
+- **Disk:** 20 GB
+- **OS:** pfSense 2.7.x
+- **Network:**
+  - Adapter 1 (WAN) – NAT (Internet access)
+  - Adapter 2 (LAN) – Host-Only (VMnet1) – 192.168.1.0/24
+  - Adapter 3 (DMZ) – Host-Only (VMnet2) – 192.168.10.0/24
+  - Adapter 4 (SERVERS) – Host-Only (VMnet3) – 192.168.20.0/24
+  - Adapter 5 (ADMIN) – Host-Only (VMnet9) – 192.168.99.0/24
+
+---
+
+## 🔧 Core Services
+- Firewall & NAT
+- VLAN segmentation
+- pfBlockerNG (Content filtering, reputation lists)
+- DNS Forwarding (optional resolver)
+- DHCP for internal networks (optional)
+
+---
+
+## 🌐 Network Addresses
+| Interface | Network  | IP Address         |
+|-----------|-----------|--------------------|
+| LAN       | VMnet1    | 192.168.1.254/24   |
+| DMZ       | VMnet2    | 192.168.10.254/24  |
+| SERVERS   | VMnet3    | 192.168.20.254/24  |
+| ADMIN     | VMnet9    | 192.168.99.1/24    |
+
+---
+
+## 🚀 Basic Setup Steps
+
+1️⃣ **Install pfSense 2.7.x** from the ISO.
+
+2️⃣ **Assign interfaces**:
+- em0 → WAN (NAT)
+- em1 → LAN
+- em2 → DMZ
+- em3 → SERVERS
+- em4 → ADMIN
+
+3️⃣ **Set static IPs**:
+- LAN: 192.168.1.254/24
+- DMZ: 192.168.10.254/24
+- SERVERS: 192.168.20.254/24
+- ADMIN: 192.168.99.1/24
+
+4️⃣ **Access WebGUI**:
+- Open `https://192.168.99.1` from your Windows host.
+- Login: `admin / pfsense`.
+
+5️⃣ **Run Setup Wizard**:
+- Hostname: `gatekeeper.lab.local`
+- Domain: `lab.local`
+- Upstream DNS: `8.8.8.8`
+
+6️⃣ **Install pfBlockerNG**:
+- Go to: `System > Package Manager > Available Packages`.
+- Install: `pfBlockerNG-devel`.
+
+7️⃣ **Configure Remote Logging**:
+- Go to: `Status > System Logs > Settings > Remote Syslog Servers`.
+- Add: `192.168.20.30` (Splunk - Oracle-SI).
+
+---
+
+## 🛡️ Hardening Ideas
+- Implement IDS/IPS (Snort/Suricata).
+- Create advanced firewall rules (Geo-blocking, Application control).
+- Enable log forwarding to SIEM (Oracle-SI).
+
+--- 
