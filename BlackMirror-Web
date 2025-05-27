@@ -1,0 +1,103 @@
+
+# VM 07 – BlackMirror-Web (Vulnerable Webapp)
+
+## 🖥️ VM Configuration
+- **RAM:** 2 GB
+- **vCPU:** 1
+- **Disk:** 20 GB
+- **OS:** Ubuntu Server 22.04 LTS
+- **Network:**
+  - Host-Only (VMnet2 - DMZ)
+  - Host-Only (VMnet9 - ADMIN) for browser access from Windows
+
+---
+
+## 🌐 Network Configuration
+- **Static IP (DMZ):** 192.168.10.120
+- **Static IP (ADMIN):** 192.168.99.120 (for access via browser)
+
+---
+
+## 🔧 Services
+- DVWA (Damn Vulnerable Web App)
+- OWASP Juice Shop
+- Apache2 + MySQL/MariaDB
+
+---
+
+## 🔧 Install & Configure
+
+### 1️⃣ Install Apache, PHP, MySQL:
+
+```bash
+apt update
+apt install apache2 php libapache2-mod-php php-mysql mariadb-server git
+```
+
+---
+
+### 2️⃣ Setup DVWA:
+
+```bash
+cd /var/www/html
+git clone https://github.com/digininja/DVWA.git
+chown -R www-data:www-data DVWA
+```
+
+Edit DVWA config file:
+
+```php
+nano /var/www/html/DVWA/config/config.inc.php
+```
+
+Change database credentials:
+
+```php
+$_DVWA[ 'db_user' ] = 'root';
+$_DVWA[ 'db_password' ] = 'password';
+```
+
+Start and configure MySQL:
+
+```bash
+mysql_secure_installation
+mysql -u root -p
+CREATE DATABASE dvwa;
+```
+
+---
+
+### 3️⃣ Setup OWASP Juice Shop:
+
+```bash
+apt install nodejs npm
+mkdir /var/www/juice-shop
+cd /var/www/juice-shop
+npx create-juice-shop
+npm start
+```
+
+---
+
+### 4️⃣ Access Webapps:
+
+- **DVWA:** http://192.168.10.99/DVWA
+- **Juice Shop:** http://192.168.10.99:3000
+- **Admin (Windows browser):** http://192.168.99.120
+
+---
+
+## 🎯 Role in the Lab
+
+- External attack surface for penetration testing.
+- Targets for Trinity-Pentest (Kali Linux) and other offensive scenarios.
+- Generates logs for SIEM (Oracle-SI).
+
+---
+
+## 🛡️ Notes & Hardening Ideas
+
+- Configure reverse proxy or WAF (e.g., Nginx, ModSecurity).
+- Enable access logs and forward to Splunk (Oracle-SI).
+- Regularly reset DVWA and Juice Shop for clean test runs.
+- Consider HTTPS setup for realistic scenarios.
